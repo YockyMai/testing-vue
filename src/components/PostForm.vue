@@ -1,61 +1,52 @@
 <template>
-	<div class="create-post">
-		<form @submit.prevent>
-			<h2>Создай пост</h2>
-			<input
-				v-bind:value="title"
-				@input="title = $event.target.value"
-				type="text"
-				placeholder="Название поста"
-			/>
-			<input v-model="body" type="text" placeholder="Описание поста" />
-			<!-- v-model делает автоматическое двусторонее свзяывание с моделью -->
-			<my-button @click="createPost"> Создать пост </my-button>
-		</form>
-	</div>
+  <div class="create-post">
+    <MyModal @closeModal="modalVisible = false" :modalVisible="modalVisible">
+      <h2>Создай пост</h2>
+      <MyInput v-model="title" type="text" placeholder="Название поста" />
+      <MyInput v-model="body" type="text" placeholder="Описание поста" />
+      <!-- v-model делает автоматическое двусторонее свзяывание с моделью -->
+      <MyButton @click="createPost"> Создать пост </MyButton>
+    </MyModal>
+    <MyButton @click="modalVisible = !modalVisible"> Создать пост </MyButton>
+  </div>
 </template>
 <script>
-import MyButton from './UI/MyButton.vue';
+import MyModal from "@/components/UI/MyModal";
+import MyButton from "@/components/UI/MyButton";
 export default {
-	components: { MyButton },
-	data() {
-		return {
-			title: '',
-			body: '',
-		};
-	},
-	methods: {
-		createPost() {
-			if ((this.title.length && this.body.length) > 0) {
-				this.$emit('create', this.title, this.body); // 1 param - name a function , next params - yours date
-				this.title = '';
-				this.body = '';
-			} else {
-				alert('Заполните все поля');
-			}
-		},
-	},
+  components: { MyButton, MyModal },
+  data() {
+    return {
+      title: "",
+      body: "",
+      modalVisible: false,
+    };
+  },
+  methods: {
+    createPost() {
+      if ((this.title.length && this.body.length) > 0) {
+        this.$emit("create", this.title, this.body); // 1 param - name a function , next params - yours date
+        this.title = "";
+        this.body = "";
+        this.modalVisible = !this.modalVisible;
+      } else {
+        alert("Заполните все поля");
+      }
+    },
+  },
 };
 </script>
 <style scoped lang="scss">
 .create-post {
-	position: fixed;
-	width: 100%;
-	background-color: rgb(127, 126, 219);
-	height: 150px;
-	display: flex;
-	align-items: center;
-	form {
-		h2 {
-			text-align: center;
-		}
-		input {
-			display: block;
-			margin-bottom: 10px;
-		}
-		margin: 0 auto;
-
-		width: max-content;
-	}
+  h2 {
+    color: #292d3e;
+    padding-bottom: 10px;
+  }
+  position: fixed;
+  width: 100%;
+  background-color: rgb(40, 40, 72);
+  height: 50px;
+  display: flex;
+  align-items: center;
 }
 </style>
